@@ -1,4 +1,4 @@
-const { pageQuery } = require('../utils/mongo-helper');
+const { buildPageQuery } = require('../utils/mongo-helper');
 
 function page() {
   const resps = this.pageSchema;
@@ -43,7 +43,7 @@ function page() {
   }];
 
   const handler = this.middlewareWrap(async (model, { query }) => {
-    const ret = await pageQuery(model, query);
+    const ret = await buildPageQuery(model, query);
 
     return ret;
   });

@@ -28,6 +28,6 @@ function urlJoin(...args) {
   return ensurePrefix(urlJoin_(...urlArray), '/');
 }
 
-export {
+module.exports = {
   urlJoin,
 };

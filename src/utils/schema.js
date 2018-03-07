@@ -102,7 +102,7 @@ function toHttpResponseSchema(data) {
 }
 
 
-export {
+module.exports = {
   countSchema,
   multiUpdateSchema,
   toJsonSchema,

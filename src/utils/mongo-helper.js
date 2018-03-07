@@ -59,7 +59,7 @@ function instanceOfMongooseModel(model) {
     model.collection);
 }
 
-export {
+module.exports = {
   buildQuery,
   buildPageQuery,
   instanceOfMongooseModel,

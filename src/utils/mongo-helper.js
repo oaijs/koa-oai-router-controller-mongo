@@ -28,8 +28,8 @@ function buildQuery(fn, query = {}, params = {}) {
   return fn;
 }
 
-function buildPageQuery(model, params) {
-  const page = _.toNumber(_.get(params, 'page', 0));
+function buildPageQuery(model, params, pageStart) {
+  const page = _.toNumber(_.get(params, 'page', 0)) - pageStart;
   const size = _.toNumber(_.get(params, 'size', 10));
   const where = _.get(params, 'where');
 
@@ -39,16 +39,13 @@ function buildPageQuery(model, params) {
   params.limit = size;
 
   return Promise.props({
-    page,
+    page: page + 1,
     size,
     total: buildQuery(model.count(), { where }),
     list: buildQuery(model.find(), params),
   })
     .then((ret) => {
-      return {
-        pageCount: Math.ceil(ret.total / ret.size),
-        ...ret,
-      };
+      return _.merge({}, { pageCount: Math.ceil(ret.total / ret.size) }, ret);
     });
 }
 

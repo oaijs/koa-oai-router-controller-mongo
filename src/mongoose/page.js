@@ -20,7 +20,8 @@ function page() {
     format: 'int32',
     in: 'query',
     required: false,
-    default: 0,
+    default: this.pageStart,
+    min: this.pageStart,
   }, {
     name: 'size',
     type: 'number',
@@ -43,7 +44,7 @@ function page() {
   }];
 
   const handler = this.middlewareWrap(async (model, { query }) => {
-    const ret = await buildPageQuery(model, query);
+    const ret = await buildPageQuery(model, query, this.pageStart);
 
     return ret;
   });

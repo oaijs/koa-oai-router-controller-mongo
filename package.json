@@ -1,6 +1,6 @@
 {
   "name": "koa-oai-router-controller-mongo",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,7 @@
   "dependencies": {
     "lodash": "^4.17.5",
     "mongoose": "^5.0.9",
+    "mongoose-schema-jsonschema": "^1.1.15",
     "pluralize": "^7.0.0",
     "url-join": "^4.0.0"
   },

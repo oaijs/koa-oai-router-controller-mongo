@@ -21,6 +21,7 @@ class ControllerMongo {
       beforeBundle = (info) => { return info; },
       reply,
       model,
+      pageStart = 0,
     } = opts;
 
     this.datasourceName = datasourceName;
@@ -29,6 +30,7 @@ class ControllerMongo {
     this.beforeBundle = beforeBundle;
     this.reply = reply;
     this.model = model;
+    this.pageStart = pageStart;
 
     this.schema = instanceOfMongooseModel(model) ? toJsonSchema(this.model) : { type: 'object' };
     this.updateSchema = toUpdateSchema(this.schema);

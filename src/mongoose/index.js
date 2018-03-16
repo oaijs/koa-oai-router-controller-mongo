@@ -22,6 +22,7 @@ class ControllerMongo {
       reply,
       model,
       pageStart = 0,
+      methods = [],
     } = opts;
 
     this.datasourceName = datasourceName;
@@ -31,6 +32,7 @@ class ControllerMongo {
     this.reply = reply;
     this.model = model;
     this.pageStart = pageStart;
+    this.methods = methods;
 
     this.schema = instanceOfMongooseModel(model) ? toJsonSchema(this.model) : { type: 'object' };
     this.updateSchema = toUpdateSchema(this.schema);
@@ -57,7 +59,7 @@ class ControllerMongo {
       'findById',
       'findOneAndUpdateById',
     ].forEach((funName) => {
-      if (_.isFunction(this[funName])) {
+      if ((_.isEmpty(this.methods) || _.includes(this.methods, funName)) && _.isFunction(this[funName])) {
         _.merge(paths, this[funName]());
       }
     });

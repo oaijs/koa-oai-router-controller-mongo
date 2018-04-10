@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const mongoseSchema2JsonSchema = require('mongoose2jsonschema');
 
 const countSchema = {
   title: 'countSchema',
@@ -31,7 +32,7 @@ const multiUpdateSchema = {
 };
 
 function toJsonSchema(model) {
-  const schema = model.jsonSchema();
+  const schema = mongoseSchema2JsonSchema(model.schema);
   schema.properties = _.omit(schema.properties, ['_id', '__v']);
 
   return schema;
@@ -83,8 +84,9 @@ function toPageSchema(schema) {
 
 function toHttpResponseSchema(data) {
   return {
+    description: 'Http response schema',
     schema: {
-      title: 'Http response model',
+      title: 'Http response schema',
       type: 'object',
       required: ['errcode', 'errmsg'],
       properties: {

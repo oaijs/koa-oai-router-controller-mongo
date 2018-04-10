@@ -70,7 +70,7 @@ class ControllerMongo {
   bundlePath(method, suffix, summary, parameters, responses, handler) {
     const endpoint = urlJoin(this.datasourceName, this.collectionName, suffix);
 
-    const desc = this.beforeBundle({
+    const operation = {
       summary,
       tags: [`${this.datasourceName}.${this.collectionName}`],
       'x-oai-controller': [{
@@ -78,7 +78,9 @@ class ControllerMongo {
       }],
       parameters,
       responses: { default: toHttpResponseSchema(responses) },
-    });
+    };
+
+    const desc = this.beforeBundle(operation, method, endpoint);
 
     return _.set({}, `${endpoint}.${method}`, desc);
   }

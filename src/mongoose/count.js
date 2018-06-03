@@ -11,7 +11,7 @@ function count() {
   }];
 
   const handler = this.middlewareWrap(async (model, { query }) => {
-    const ret = await buildQuery(model.count(), query);
+    const ret = await buildQuery(model.count(), query, undefined, this.modelStore);
 
     return ret;
   });

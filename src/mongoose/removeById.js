@@ -10,7 +10,7 @@ function removeById() {
   }];
 
   const handler = this.middlewareWrap(async (model, { param, query }) => {
-    const ret = await buildQuery(model.remove(), query, param);
+    const ret = await buildQuery(model.remove(), query, param, this.modelStore);
 
     return ret;
   });

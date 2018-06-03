@@ -2,7 +2,17 @@ const _ = require('lodash');
 
 const { JsonParse } = require('./json');
 
-function buildQuery(fn, query = {}, params = {}) {
+function populateHandler(populate, modelStore) {
+  if (modelStore && modelStore.get && populate.model && populate.conn) {
+    populate.model = modelStore.get(`${populate.conn}.${populate.model}`);
+
+    return populate;
+  }
+
+  return populate;
+}
+
+function buildQuery(fn, query = {}, params = {}, modelStore) {
   const id = params.id;
   let where = JsonParse(query.where);
   const fields = JsonParse(query.fields);
@@ -23,12 +33,20 @@ function buildQuery(fn, query = {}, params = {}) {
 
   if (limit) fn.limit(limit);
 
-  if (!_.isEmpty(populate) && _.isObject(populate)) fn.populate(populate);
+  if (!_.isEmpty(populate) && _.isArray(populate) && _.isString(populate[0])) {
+    fn.populate(populate);
+  } else if (!_.isEmpty(populate) && _.isArray(populate) && _.isObject(populate[0])) {
+    _.each(populate, (pop) => {
+      fn.populate(populateHandler(pop, modelStore));
+    });
+  } else if (!_.isEmpty(populate) && _.isObject(populate)) {
+    fn.populate(populateHandler(populate, modelStore));
+  }
 
   return fn;
 }
 
-function buildPageQuery(model, params, pageStart) {
+function buildPageQuery(model, params, pageStart, modelStore) {
   const page = _.toNumber(_.get(params, 'page', 0)) - pageStart;
   const size = _.toNumber(_.get(params, 'size', 10));
   const where = _.get(params, 'where');
@@ -41,8 +59,8 @@ function buildPageQuery(model, params, pageStart) {
   return Promise.props({
     page: page + 1,
     size,
-    total: buildQuery(model.count(), { where }),
-    list: buildQuery(model.find(), params),
+    total: buildQuery(model.count(), { where }, undefined, modelStore),
+    list: buildQuery(model.find(), params, undefined, modelStore),
   })
     .then((ret) => {
       return _.merge({}, { pageCount: Math.ceil(ret.total / ret.size) }, ret);

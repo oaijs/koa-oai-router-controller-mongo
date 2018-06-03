@@ -43,7 +43,7 @@ function find() {
   }];
 
   const handler = this.middlewareWrap(async (model, { query }) => {
-    const ret = await buildQuery(model.find(), query);
+    const ret = await buildQuery(model.find(), query, undefined, this.modelStore);
 
     return ret;
   });

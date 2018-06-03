@@ -21,6 +21,7 @@ class ControllerMongo {
       beforeBundle = (info) => { return info; },
       reply,
       model,
+      modelStore,
       pageStart = 0,
       methods = [],
     } = opts;
@@ -31,6 +32,7 @@ class ControllerMongo {
     this.beforeBundle = beforeBundle;
     this.reply = reply;
     this.model = model;
+    this.modelStore = modelStore;
     this.pageStart = pageStart;
     this.methods = methods;
 

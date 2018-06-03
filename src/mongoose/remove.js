@@ -11,7 +11,7 @@ function remove() {
   }];
 
   const handler = this.middlewareWrap(async (model, { query }) => {
-    const ret = await buildQuery(model.remove(), query);
+    const ret = await buildQuery(model.remove(), query, undefined, this.modelStore);
 
     return ret;
   });

@@ -22,7 +22,7 @@ function findById() {
   }];
 
   const handler = this.middlewareWrap(async (model, { query, param }) => {
-    const ret = await buildQuery(model.findOne(), query, param);
+    const ret = await buildQuery(model.findOne(), query, param, this.modelStore);
 
     return ret;
   });

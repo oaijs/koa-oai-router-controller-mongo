@@ -23,7 +23,7 @@ function findOne() {
   }];
 
   const handler = this.middlewareWrap(async (model, { query }) => {
-    const ret = await buildQuery(model.findOne(), query);
+    const ret = await buildQuery(model.findOne(), query, undefined, this.modelStore);
 
     return ret;
   });

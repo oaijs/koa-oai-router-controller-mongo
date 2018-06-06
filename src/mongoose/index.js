@@ -57,6 +57,7 @@ class ControllerMongo {
       'update',
       'findOne',
       'findOneAndUpdate',
+      'download',
       'removeById',
       'findById',
       'findOneAndUpdateById',
@@ -100,7 +101,7 @@ class ControllerMongo {
           body: ctx.request.body,
         };
 
-        const ret = await handler(model, data);
+        const ret = await handler(model, data, ctx);
 
         self.reply(ctx, next, null, ret);
       } catch (error) {
@@ -132,5 +133,6 @@ ControllerMongo.prototype.mixin(require('./page'));
 ControllerMongo.prototype.mixin(require('./remove'));
 ControllerMongo.prototype.mixin(require('./removeById'));
 ControllerMongo.prototype.mixin(require('./update'));
+ControllerMongo.prototype.mixin(require('./download'));
 
 module.exports = ControllerMongo;

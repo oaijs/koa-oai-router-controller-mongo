@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const csv = require('csv');
+const iconv = require('iconv-lite');
 
 const { JsonParse } = require('../utils/json');
 const { buildQuery } = require('../utils/mongo-helper');
@@ -34,6 +35,12 @@ function download() {
     format: 'json',
     in: 'query',
     required: false,
+  }, {
+    name: 'charset',
+    type: 'string',
+    in: 'query',
+    required: false,
+    default: 'utf8',
   }];
 
   const handler = this.middlewareWrap(async (model, { query }, ctx) => {
@@ -44,7 +51,9 @@ function download() {
     const ret = await buildQuery(model.find().lean(), query, undefined, this.modelStore)
       .cursor()
       .pipe(csv.transform(transform))
-      .pipe(csv.stringify({ header: true, columns: _.isEmpty(columns) ? undefined : columns }));
+      .pipe(csv.stringify({ header: true, columns: _.isEmpty(columns) ? undefined : columns }))
+      .pipe(iconv.decodeStream('utf8'))
+      .pipe(iconv.encodeStream(query.charset || 'utf8'));
 
     ctx.set('Content-Type', 'text/csv');
     ctx.attachment(`${ctx.params.datasource}-${ctx.params.collection}.csv`);
